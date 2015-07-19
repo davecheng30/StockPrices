@@ -1,0 +1,5 @@
+.DS_Store
+graphics/.DS_Store
+*.xcuserstate
+xcuserdata
+BigMagnify.xcodeproj/project.xcworkspace/xcshareddata/BigMagnify.xccheckout
