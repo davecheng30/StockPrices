@@ -8,6 +8,8 @@
 
 #import <Cocoa/Cocoa.h>
 #import <XCTest/XCTest.h>
+#import "StockPricesParser.h"
+#import "StockPrice.h"
 
 @interface StockPricesTests : XCTestCase
 
@@ -15,26 +17,17 @@
 
 @implementation StockPricesTests
 
-- (void)setUp {
-    [super setUp];
-    // Put setup code here. This method is called before the invocation of each test method in the class.
-}
-
-- (void)tearDown {
-    // Put teardown code here. This method is called after the invocation of each test method in the class.
-    [super tearDown];
-}
-
-- (void)testExample {
-    // This is an example of a functional test case.
-    XCTAssert(YES, @"Pass");
-}
-
-- (void)testPerformanceExample {
-    // This is an example of a performance test case.
-    [self measureBlock:^{
-        // Put the code you want to measure the time of here.
-    }];
+- (void)testJSONParsing
+{
+   NSURL* jsonURL = [[NSBundle mainBundle] URLForResource:@"stockprices" withExtension:@"json"];
+   
+   NSArray* stockPrices = [StockPricesParser stockPricesFromURL:jsonURL];
+   XCTAssertEqual(5, stockPrices.count);
+   XCTAssertEqualWithAccuracy(95.36,  ((StockPrice *)stockPrices[0]).close, 0.001);
+   XCTAssertEqualWithAccuracy(97.99,  ((StockPrice *)stockPrices[1]).close, 0.001);
+   XCTAssertEqualWithAccuracy(93.00,  ((StockPrice *)stockPrices[2]).close, 0.001);
+   XCTAssertEqualWithAccuracy(101.43, ((StockPrice *)stockPrices[3]).close, 0.001);
+   XCTAssertEqualWithAccuracy(102.66, ((StockPrice *)stockPrices[4]).close, 0.001);
 }
 
 @end
