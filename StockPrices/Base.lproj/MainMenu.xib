@@ -13,6 +13,7 @@
         <customObject id="-3" userLabel="Application" customClass="NSObject"/>
         <customObject id="Voe-Tx-rLC" customClass="AppDelegate">
             <connections>
+                <outlet property="stockPricesContainerView" destination="frG-YV-Vzp" id="QCB-Dy-U2T"/>
                 <outlet property="window" destination="QvC-M9-y7g" id="gIp-Ho-8D9"/>
             </connections>
         </customObject>
@@ -675,7 +676,7 @@
                 <rect key="frame" x="0.0" y="0.0" width="480" height="360"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
-                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="frG-YV-Vzp" customClass="StockPricesView">
+                    <customView translatesAutoresizingMaskIntoConstraints="NO" id="frG-YV-Vzp">
                         <rect key="frame" x="20" y="61" width="440" height="279"/>
                     </customView>
                     <button verticalHuggingPriority="750" translatesAutoresizingMaskIntoConstraints="NO" id="1N0-ld-b0H">

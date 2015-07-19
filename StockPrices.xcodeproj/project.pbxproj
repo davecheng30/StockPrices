@@ -12,6 +12,8 @@
 		435B5AD41B5B2CFD00F72B59 /* stockprices.json in Resources */ = {isa = PBXBuildFile; fileRef = 435B5AD11B5B2CBE00F72B59 /* stockprices.json */; };
 		435B5AD71B5B2D5500F72B59 /* StockPricesParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 435B5AD61B5B2D5500F72B59 /* StockPricesParser.m */; };
 		435B5ADA1B5B345A00F72B59 /* StockPricesView.m in Sources */ = {isa = PBXBuildFile; fileRef = 435B5AD91B5B345A00F72B59 /* StockPricesView.m */; };
+		435B5ADE1B5B360D00F72B59 /* StockPricesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 435B5ADC1B5B360D00F72B59 /* StockPricesViewController.m */; };
+		435B5ADF1B5B360D00F72B59 /* StockPricesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 435B5ADD1B5B360D00F72B59 /* StockPricesViewController.xib */; };
 		43E49B7C1B5B260F00D28B84 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E49B7B1B5B260F00D28B84 /* AppDelegate.m */; };
 		43E49B7E1B5B260F00D28B84 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 43E49B7D1B5B260F00D28B84 /* main.m */; };
 		43E49B801B5B260F00D28B84 /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 43E49B7F1B5B260F00D28B84 /* Images.xcassets */; };
@@ -37,6 +39,9 @@
 		435B5AD61B5B2D5500F72B59 /* StockPricesParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StockPricesParser.m; sourceTree = "<group>"; };
 		435B5AD81B5B345A00F72B59 /* StockPricesView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockPricesView.h; sourceTree = "<group>"; };
 		435B5AD91B5B345A00F72B59 /* StockPricesView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StockPricesView.m; sourceTree = "<group>"; };
+		435B5ADB1B5B360D00F72B59 /* StockPricesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockPricesViewController.h; sourceTree = "<group>"; };
+		435B5ADC1B5B360D00F72B59 /* StockPricesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StockPricesViewController.m; sourceTree = "<group>"; };
+		435B5ADD1B5B360D00F72B59 /* StockPricesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StockPricesViewController.xib; sourceTree = "<group>"; };
 		43E49B751B5B260F00D28B84 /* StockPrices.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = StockPrices.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		43E49B791B5B260F00D28B84 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		43E49B7A1B5B260F00D28B84 /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
@@ -98,6 +103,9 @@
 		43E49B771B5B260F00D28B84 /* StockPrices */ = {
 			isa = PBXGroup;
 			children = (
+				435B5ADB1B5B360D00F72B59 /* StockPricesViewController.h */,
+				435B5ADC1B5B360D00F72B59 /* StockPricesViewController.m */,
+				435B5ADD1B5B360D00F72B59 /* StockPricesViewController.xib */,
 				435B5AD81B5B345A00F72B59 /* StockPricesView.h */,
 				435B5AD91B5B345A00F72B59 /* StockPricesView.m */,
 				43E49B7A1B5B260F00D28B84 /* AppDelegate.h */,
@@ -221,6 +229,7 @@
 				43E49B801B5B260F00D28B84 /* Images.xcassets in Resources */,
 				435B5AD21B5B2CBE00F72B59 /* stockprices.json in Resources */,
 				43E49B831B5B260F00D28B84 /* MainMenu.xib in Resources */,
+				435B5ADF1B5B360D00F72B59 /* StockPricesViewController.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -242,6 +251,7 @@
 				43E49B7E1B5B260F00D28B84 /* main.m in Sources */,
 				435B5AD71B5B2D5500F72B59 /* StockPricesParser.m in Sources */,
 				43E49B7C1B5B260F00D28B84 /* AppDelegate.m in Sources */,
+				435B5ADE1B5B360D00F72B59 /* StockPricesViewController.m in Sources */,
 				435B5ADA1B5B345A00F72B59 /* StockPricesView.m in Sources */,
 				435B5AD01B5B2A4F00F72B59 /* StockPrice.m in Sources */,
 			);
