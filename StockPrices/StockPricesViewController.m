@@ -33,6 +33,7 @@ CALayer* _textLayerWithString(NSString* str)
 @property(nonatomic, copy) NSArray* stockPrices;
 @property(nonatomic) NSPoint originLocation;
 @property(nonatomic) NSMutableArray* dateLayers;
+@property(nonatomic) NSMutableArray* closePriceLayers;
 
 @end
 
@@ -43,6 +44,7 @@ CALayer* _textLayerWithString(NSString* str)
    [super viewDidLoad];
    
    self.dateLayers = [NSMutableArray array];
+   self.closePriceLayers = [NSMutableArray array];
    
    self.view.wantsLayer = YES;
    self.view.layer.backgroundColor = [NSColor whiteColor].CGColor;
@@ -75,6 +77,9 @@ CALayer* _textLayerWithString(NSString* str)
 {
    [self createDateLayers];
    [self positionDateLayers];
+   
+   [self createClosePriceLayers];
+   [self positionClosePriceLayers];
 }
 
 - (void)createDateLayers
@@ -109,5 +114,52 @@ CALayer* _textLayerWithString(NSString* str)
       currX += distanceBetweenLayers;
    }
 }
+
+-(NSRange)yAxisDollarRange
+{
+   NSParameterAssert(self.stockPrices.count > 0);
+   CGFloat minClosePrice = CGFLOAT_MAX;
+   CGFloat maxClosePrice = CGFLOAT_MIN;
+   for( StockPrice* stockPrice in self.stockPrices )
+   {
+      CGFloat closePrice = stockPrice.closePrice;
+      minClosePrice = MIN(minClosePrice, closePrice);
+      maxClosePrice = MAX(maxClosePrice, closePrice);
+   }
+   int min = floor(minClosePrice);
+   int max = ceil(maxClosePrice);
+   return NSMakeRange(min, max-min);
+}
+
+- (void)createClosePriceLayers
+{
+   CALayer* rootLayer = self.view.layer;
+
+   // Create a y-axis point for each integer dollar in this range
+   NSRange yRange = [self yAxisDollarRange];
+   for( NSUInteger i = yRange.location; i <= NSMaxRange(yRange); i++)
+   {
+      NSString* closePriceString = [NSString stringWithFormat:@"%ld", i];
+      CALayer* closePriceLayer = _textLayerWithString(closePriceString);
+      closePriceLayer.anchorPoint = CGPointMake(1.0, 0.5);
+      [rootLayer addSublayer:closePriceLayer];
+      [self.closePriceLayers addObject:closePriceLayer];
+   }
+}
+
+- (void)positionClosePriceLayers
+{
+   NSUInteger numLayers = self.closePriceLayers.count;
+   CGFloat totalHeight = self.view.frame.size.height - self.originLocation.y;
+   CGFloat distanceBetweenLayers = totalHeight / (numLayers+1);
+   
+   int currY = self.originLocation.y + distanceBetweenLayers;
+   for( CALayer* closePriceLayer in self.closePriceLayers )
+   {
+      closePriceLayer.position = CGPointMake(self.originLocation.x, currY);
+      currY += distanceBetweenLayers;
+   }
+}
+
 
 @end
