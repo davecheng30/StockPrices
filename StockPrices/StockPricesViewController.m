@@ -37,6 +37,7 @@ CALayer* _textLayerWithString(NSString* str)
 @property(nonatomic) NSMutableArray* dateLayers;
 @property(nonatomic) NSMutableArray* closePriceLayers;
 @property(nonatomic) NSMutableArray* closePriceLineLayers;
+@property(nonatomic) CAShapeLayer* graphLayer;
 
 @property(nonatomic) CGFloat xStep;
 @property(nonatomic) CGFloat yStep;
@@ -92,7 +93,8 @@ CALayer* _textLayerWithString(NSString* str)
    [self createClosePriceLayers];
    [self positionClosePriceLayers];
    
-   [self createGraph];
+   [self createGraphLayer];
+   [self animateInGraphLayer];
 }
 
 - (void)createDateLayers
@@ -199,14 +201,29 @@ CALayer* _textLayerWithString(NSString* str)
                       self.originLocation.y + self.yStep + priceOffsetFromLowestPrice*self.yStep);
 }
 
-- (void)createGraph
+- (CGPathRef)createPathForFlatGraph
 {
-   CAShapeLayer* shapeLayer = [CAShapeLayer layer];
-   shapeLayer.frame = self.view.bounds;
-   shapeLayer.lineWidth = 2.0f;
-   shapeLayer.strokeColor = [NSColor blackColor].CGColor;
-   shapeLayer.fillColor = nil;
-   
+   BOOL firstPoint = YES;
+   CGMutablePathRef path = CGPathCreateMutable();
+   for( StockPrice* stockPrice in self.stockPrices )
+   {
+      NSPoint pt = [self pointForStockPrice:stockPrice];
+      pt.y = self.originLocation.y;
+      if ( firstPoint )
+      {
+         CGPathMoveToPoint(path, NULL, pt.x, pt.y);
+         firstPoint = NO;
+      }
+      else
+      {
+         CGPathAddLineToPoint(path, NULL, pt.x, pt.y);
+      }
+   }
+   return path;
+}
+
+- (CGPathRef)createPathForGraph
+{
    BOOL firstPoint = YES;
    CGMutablePathRef path = CGPathCreateMutable();
    for( StockPrice* stockPrice in self.stockPrices )
@@ -222,13 +239,38 @@ CALayer* _textLayerWithString(NSString* str)
          CGPathAddLineToPoint(path, NULL, pt.x, pt.y);
       }
    }
-   
-   shapeLayer.path = path;
-   
-   CGPathRelease(path);
-   [self.view.layer addSublayer:shapeLayer];
+   return path;
 }
 
+- (void)createGraphLayer
+{
+   self.graphLayer = [CAShapeLayer layer];
+   self.graphLayer.frame = self.view.bounds;
+   self.graphLayer.lineWidth = 1.0f;
+   self.graphLayer.strokeColor = [NSColor blackColor].CGColor;
+   self.graphLayer.fillColor = nil;
+   CGPathRef path = [self createPathForFlatGraph];
+   self.graphLayer.path = path;
+   CGPathRelease(path);
+   
+   [self.view.layer addSublayer:self.graphLayer];
+}
 
+- (void)animateInGraphLayer
+{
+   CGPathRef flatPath = [self createPathForFlatGraph];
+   CGPathRef graphPath = [self createPathForGraph];
+   
+   CABasicAnimation* pathAnimation = [CABasicAnimation animationWithKeyPath:@"path"];
+   pathAnimation.duration = 1.0f;
+   pathAnimation.fromValue = (__bridge id)flatPath;
+   pathAnimation.toValue = (__bridge id)graphPath;
+   pathAnimation.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+   [self.graphLayer addAnimation:pathAnimation forKey:@"path"];
+   self.graphLayer.path = graphPath;
+   
+   CGPathRelease(flatPath);
+   CGPathRelease(graphPath);
+}
 
 @end
