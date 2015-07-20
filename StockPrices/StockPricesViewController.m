@@ -34,6 +34,7 @@ CALayer* _textLayerWithString(NSString* str)
 @property(nonatomic) NSPoint originLocation;
 @property(nonatomic) NSMutableArray* dateLayers;
 @property(nonatomic) NSMutableArray* closePriceLayers;
+@property(nonatomic) NSMutableArray* closePriceLineLayers;
 
 @end
 
@@ -45,6 +46,7 @@ CALayer* _textLayerWithString(NSString* str)
    
    self.dateLayers = [NSMutableArray array];
    self.closePriceLayers = [NSMutableArray array];
+   self.closePriceLineLayers = [NSMutableArray array];
    
    self.view.wantsLayer = YES;
    self.view.layer.backgroundColor = [NSColor whiteColor].CGColor;
@@ -145,6 +147,13 @@ CALayer* _textLayerWithString(NSString* str)
       closePriceLayer.anchorPoint = CGPointMake(1.0, 0.5);
       [rootLayer addSublayer:closePriceLayer];
       [self.closePriceLayers addObject:closePriceLayer];
+      
+      CALayer* closePriceLineLayer = [CALayer layer];
+      closePriceLineLayer.frame = CGRectMake(0, 0, self.view.frame.size.width - self.originLocation.x, 1);
+      closePriceLineLayer.backgroundColor = [NSColor lightGrayColor].CGColor;
+      closePriceLineLayer.anchorPoint = CGPointMake(0.0, 0.5);
+      [rootLayer addSublayer:closePriceLineLayer];
+      [self.closePriceLineLayers addObject:closePriceLineLayer];
    }
 }
 
@@ -158,6 +167,13 @@ CALayer* _textLayerWithString(NSString* str)
    for( CALayer* closePriceLayer in self.closePriceLayers )
    {
       closePriceLayer.position = CGPointMake(self.originLocation.x - 2, currY);
+      currY += distanceBetweenLayers;
+   }
+
+   currY = self.originLocation.y + distanceBetweenLayers;
+   for( CALayer* closePriceLineLayer in self.closePriceLineLayers )
+   {
+      closePriceLineLayer.position = CGPointMake(self.originLocation.x, currY);
       currY += distanceBetweenLayers;
    }
 }
