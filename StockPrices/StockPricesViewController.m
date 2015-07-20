@@ -36,6 +36,9 @@ CALayer* _textLayerWithString(NSString* str)
 @property(nonatomic) NSMutableArray* closePriceLayers;
 @property(nonatomic) NSMutableArray* closePriceLineLayers;
 
+@property(nonatomic) NSDate* firstDate;
+@property(nonatomic) NSDate* lastDate;
+@property(nonatomic) NSRange priceRange;
 @end
 
 @implementation StockPricesViewController
@@ -88,14 +91,14 @@ CALayer* _textLayerWithString(NSString* str)
 {
    CALayer* rootLayer = self.view.layer;
    
-   NSDate* firstDate = [self.stockPrices.firstObject date];
-   NSDate* lastDate  = [self.stockPrices.lastObject date];
+   self.firstDate = [self.stockPrices.firstObject date];
+   self.lastDate  = [self.stockPrices.lastObject date];
    
    // Create an x-axis label for each date in between (inclusive)
    NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
    [dateFormatter setDateFormat:@"M/D"];
    NSTimeInterval secondsInOneDay = 60*60*24;
-   for(NSDate* currentDate = firstDate; [currentDate isLessThanOrEqualTo:lastDate]; currentDate = [currentDate dateByAddingTimeInterval:secondsInOneDay] )
+   for(NSDate* currentDate = self.firstDate; [currentDate isLessThanOrEqualTo:self.lastDate]; currentDate = [currentDate dateByAddingTimeInterval:secondsInOneDay] )
    {
       NSString* dateString = [dateFormatter stringFromDate:currentDate];
       CALayer* dateLayer = _textLayerWithString(dateString);
@@ -139,8 +142,8 @@ CALayer* _textLayerWithString(NSString* str)
    CALayer* rootLayer = self.view.layer;
 
    // Create a y-axis point for each integer dollar in this range
-   NSRange yRange = [self yAxisDollarRange];
-   for( NSUInteger i = yRange.location; i <= NSMaxRange(yRange); i++)
+   self.priceRange = [self yAxisDollarRange];
+   for( NSUInteger i = self.priceRange.location; i <= NSMaxRange(self.priceRange); i++)
    {
       NSString* closePriceString = [NSString stringWithFormat:@"$%ld", i];
       CALayer* closePriceLayer = _textLayerWithString(closePriceString);
