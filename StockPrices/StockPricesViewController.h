@@ -10,4 +10,6 @@
 
 @interface StockPricesViewController : NSViewController
 
+-(void)loadStockPrices:(NSArray *)stockPrices;
+
 @end

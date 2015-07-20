@@ -8,6 +8,7 @@
 
 #import "AppDelegate.h"
 #import "StockPricesViewController.h"
+#import "StockPricesParser.h"
 
 @interface AppDelegate ()
 
@@ -31,6 +32,25 @@
    NSDictionary* views = NSDictionaryOfVariableBindings(parentView, childView);
    [parentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"H:|[childView]|" options:0 metrics:nil views:views]];
    [parentView addConstraints:[NSLayoutConstraint constraintsWithVisualFormat:@"V:|[childView]|" options:0 metrics:nil views:views]];
+}
+
+- (IBAction)loadPrices:(id)sender
+{
+   NSURL* jsonURL = [[NSBundle mainBundle] URLForResource:@"stockprices" withExtension:@"json"];
+   if ( !jsonURL )
+   {
+      NSLog(@"Could not load jsonURL = %@", jsonURL);
+      return;
+   }
+   
+   NSArray* stockPrices = [StockPricesParser stockPricesFromURL:jsonURL];
+   if ( !stockPrices )
+   {
+      NSLog(@"could not load stockPrices from URL");
+      return;
+   }
+   
+   [self.stockPricesViewController loadStockPrices:stockPrices];
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {

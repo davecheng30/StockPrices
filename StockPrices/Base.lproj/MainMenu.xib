@@ -685,6 +685,9 @@
                             <behavior key="behavior" pushIn="YES" lightByBackground="YES" lightByGray="YES"/>
                             <font key="font" metaFont="system"/>
                         </buttonCell>
+                        <connections>
+                            <action selector="loadPrices:" target="Voe-Tx-rLC" id="LcK-8t-maf"/>
+                        </connections>
                     </button>
                 </subviews>
                 <constraints>

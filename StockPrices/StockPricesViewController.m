@@ -10,12 +10,27 @@
 
 @interface StockPricesViewController ()
 
+@property(nonatomic, copy) NSArray* stockPrices;
+
 @end
 
 @implementation StockPricesViewController
 
-- (void)viewDidLoad {
+- (void)viewDidLoad
+{
     [super viewDidLoad];
+}
+
+-(void)loadStockPrices:(NSArray *)stockPrices
+{
+   self.stockPrices = stockPrices;
+   
+   [self updateView];
+}
+
+-(void)updateView
+{
+   
 }
 
 @end
