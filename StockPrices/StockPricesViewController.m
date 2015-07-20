@@ -34,6 +34,10 @@ CALayer* _textLayerWithString(NSString* str)
 
 @property(nonatomic, copy) NSArray* stockPrices;
 @property(nonatomic) NSPoint originLocation;
+
+@property(nonatomic) CALayer* xAxisLayer;
+@property(nonatomic) CALayer* yAxisLayer;
+
 @property(nonatomic) NSMutableArray* dateLayers;
 @property(nonatomic) NSMutableArray* closePriceLayers;
 @property(nonatomic) NSMutableArray* closePriceLineLayers;
@@ -61,22 +65,6 @@ CALayer* _textLayerWithString(NSString* str)
    self.view.wantsLayer = YES;
    self.view.layer.backgroundColor = [NSColor whiteColor].CGColor;
    self.originLocation = NSMakePoint(60, 30);
-   
-//   CALayer* originLayer = [CALayer layer];
-//   originLayer.backgroundColor = [NSColor redColor].CGColor;
-//   originLayer.bounds = NSMakeRect(0,0, 5, 5);
-//   originLayer.position = self.originLocation;
-//   [self.view.layer addSublayer:originLayer];
-   
-   CALayer* xAxisLayer = [CALayer layer];
-   xAxisLayer.backgroundColor = [NSColor blackColor].CGColor;
-   xAxisLayer.frame = NSMakeRect(self.originLocation.x, self.originLocation.y, self.view.bounds.size.width, 1);
-   [self.view.layer addSublayer:xAxisLayer];
-
-   CALayer* yAxisLayer = [CALayer layer];
-   yAxisLayer.backgroundColor = [NSColor blackColor].CGColor;
-   yAxisLayer.frame = NSMakeRect(self.originLocation.x, self.originLocation.y, 1, self.view.bounds.size.height);
-   [self.view.layer addSublayer:yAxisLayer];
 }
 
 -(void)loadStockPrices:(NSArray *)stockPrices
@@ -87,6 +75,8 @@ CALayer* _textLayerWithString(NSString* str)
 
 -(void)updateView
 {
+   [self createAxesLayers];
+   
    [self createDateLayers];
    [self positionDateLayers];
    
@@ -94,7 +84,25 @@ CALayer* _textLayerWithString(NSString* str)
    [self positionClosePriceLayers];
    
    [self createGraphLayer];
-   [self animateInGraphLayer];
+   
+   [self fadeInAxesAndLabels];
+   dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+      
+      [self animateInGraphLayer];
+   });
+}
+
+-(void)createAxesLayers
+{
+   self.xAxisLayer = [CALayer layer];
+   self.xAxisLayer.backgroundColor = [NSColor blackColor].CGColor;
+   self.xAxisLayer.frame = NSMakeRect(self.originLocation.x, self.originLocation.y, self.view.bounds.size.width, 1);
+   [self.view.layer addSublayer:self.xAxisLayer];
+   
+   self.yAxisLayer = [CALayer layer];
+   self.yAxisLayer.backgroundColor = [NSColor blackColor].CGColor;
+   self.yAxisLayer.frame = NSMakeRect(self.originLocation.x, self.originLocation.y, 1, self.view.bounds.size.height);
+   [self.view.layer addSublayer:self.yAxisLayer];
 }
 
 - (void)createDateLayers
@@ -271,6 +279,20 @@ CALayer* _textLayerWithString(NSString* str)
    
    CGPathRelease(flatPath);
    CGPathRelease(graphPath);
+}
+
+- (void)fadeInAxesAndLabels
+{
+   NSArray* layers = [[self.dateLayers arrayByAddingObjectsFromArray:self.closePriceLayers] arrayByAddingObjectsFromArray:self.closePriceLineLayers];
+   layers = [layers arrayByAddingObjectsFromArray:@[self.xAxisLayer, self.yAxisLayer]];
+   for( CALayer* layer in layers )
+   {
+      CABasicAnimation* anim = [CABasicAnimation animationWithKeyPath:@"opacity"];
+      anim.duration = 1.0f;
+      anim.fromValue = @0.0;
+      anim.toValue = @1.0;
+      [layer addAnimation:anim forKey:@"opacity"];
+   }
 }
 
 @end
