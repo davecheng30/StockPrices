@@ -11,7 +11,6 @@
 		435B5AD21B5B2CBE00F72B59 /* stockprices.json in Resources */ = {isa = PBXBuildFile; fileRef = 435B5AD11B5B2CBE00F72B59 /* stockprices.json */; };
 		435B5AD41B5B2CFD00F72B59 /* stockprices.json in Resources */ = {isa = PBXBuildFile; fileRef = 435B5AD11B5B2CBE00F72B59 /* stockprices.json */; };
 		435B5AD71B5B2D5500F72B59 /* StockPricesParser.m in Sources */ = {isa = PBXBuildFile; fileRef = 435B5AD61B5B2D5500F72B59 /* StockPricesParser.m */; };
-		435B5ADA1B5B345A00F72B59 /* StockPricesView.m in Sources */ = {isa = PBXBuildFile; fileRef = 435B5AD91B5B345A00F72B59 /* StockPricesView.m */; };
 		435B5ADE1B5B360D00F72B59 /* StockPricesViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 435B5ADC1B5B360D00F72B59 /* StockPricesViewController.m */; };
 		435B5ADF1B5B360D00F72B59 /* StockPricesViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = 435B5ADD1B5B360D00F72B59 /* StockPricesViewController.xib */; };
 		435B5AE21B5C917B00F72B59 /* CATextLayer+TextBounds.m in Sources */ = {isa = PBXBuildFile; fileRef = 435B5AE11B5C917B00F72B59 /* CATextLayer+TextBounds.m */; };
@@ -38,8 +37,6 @@
 		435B5AD11B5B2CBE00F72B59 /* stockprices.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = stockprices.json; path = Resources/stockprices.json; sourceTree = "<group>"; };
 		435B5AD51B5B2D5500F72B59 /* StockPricesParser.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockPricesParser.h; sourceTree = "<group>"; };
 		435B5AD61B5B2D5500F72B59 /* StockPricesParser.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StockPricesParser.m; sourceTree = "<group>"; };
-		435B5AD81B5B345A00F72B59 /* StockPricesView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockPricesView.h; sourceTree = "<group>"; };
-		435B5AD91B5B345A00F72B59 /* StockPricesView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StockPricesView.m; sourceTree = "<group>"; };
 		435B5ADB1B5B360D00F72B59 /* StockPricesViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = StockPricesViewController.h; sourceTree = "<group>"; };
 		435B5ADC1B5B360D00F72B59 /* StockPricesViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = StockPricesViewController.m; sourceTree = "<group>"; };
 		435B5ADD1B5B360D00F72B59 /* StockPricesViewController.xib */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.xib; path = StockPricesViewController.xib; sourceTree = "<group>"; };
@@ -78,11 +75,21 @@
 		435B5AD31B5B2CC100F72B59 /* Resources */ = {
 			isa = PBXGroup;
 			children = (
+				435B5ADD1B5B360D00F72B59 /* StockPricesViewController.xib */,
 				43E49B811B5B260F00D28B84 /* MainMenu.xib */,
 				43E49B7F1B5B260F00D28B84 /* Images.xcassets */,
 				435B5AD11B5B2CBE00F72B59 /* stockprices.json */,
 			);
 			name = Resources;
+			sourceTree = "<group>";
+		};
+		435B5AE31B5D1C0C00F72B59 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				435B5AE01B5C917B00F72B59 /* CATextLayer+TextBounds.h */,
+				435B5AE11B5C917B00F72B59 /* CATextLayer+TextBounds.m */,
+			);
+			name = Categories;
 			sourceTree = "<group>";
 		};
 		43E49B6C1B5B260F00D28B84 = {
@@ -108,17 +115,13 @@
 			children = (
 				435B5ADB1B5B360D00F72B59 /* StockPricesViewController.h */,
 				435B5ADC1B5B360D00F72B59 /* StockPricesViewController.m */,
-				435B5AE01B5C917B00F72B59 /* CATextLayer+TextBounds.h */,
-				435B5AE11B5C917B00F72B59 /* CATextLayer+TextBounds.m */,
-				435B5ADD1B5B360D00F72B59 /* StockPricesViewController.xib */,
-				435B5AD81B5B345A00F72B59 /* StockPricesView.h */,
-				435B5AD91B5B345A00F72B59 /* StockPricesView.m */,
-				43E49B7A1B5B260F00D28B84 /* AppDelegate.h */,
-				43E49B7B1B5B260F00D28B84 /* AppDelegate.m */,
 				435B5AD51B5B2D5500F72B59 /* StockPricesParser.h */,
 				435B5AD61B5B2D5500F72B59 /* StockPricesParser.m */,
 				435B5ACE1B5B2A4F00F72B59 /* StockPrice.h */,
 				435B5ACF1B5B2A4F00F72B59 /* StockPrice.m */,
+				43E49B7A1B5B260F00D28B84 /* AppDelegate.h */,
+				43E49B7B1B5B260F00D28B84 /* AppDelegate.m */,
+				435B5AE31B5D1C0C00F72B59 /* Categories */,
 				435B5AD31B5B2CC100F72B59 /* Resources */,
 				43E49B781B5B260F00D28B84 /* Supporting Files */,
 			);
@@ -257,7 +260,6 @@
 				435B5AD71B5B2D5500F72B59 /* StockPricesParser.m in Sources */,
 				43E49B7C1B5B260F00D28B84 /* AppDelegate.m in Sources */,
 				435B5ADE1B5B360D00F72B59 /* StockPricesViewController.m in Sources */,
-				435B5ADA1B5B345A00F72B59 /* StockPricesView.m in Sources */,
 				435B5AE21B5C917B00F72B59 /* CATextLayer+TextBounds.m in Sources */,
 				435B5AD01B5B2A4F00F72B59 /* StockPrice.m in Sources */,
 			);
