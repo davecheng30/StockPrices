@@ -75,6 +75,8 @@ CALayer* _textLayerWithString(NSString* str)
 
 -(void)updateView
 {
+   [self removeExistingLayers];
+   
    [self createAxesLayers];
    
    [self createDateLayers];
@@ -90,6 +92,36 @@ CALayer* _textLayerWithString(NSString* str)
       
       [self animateInGraphLayer];
    });
+}
+
+-(void)removeExistingLayers
+{
+   NSArray* layers = [[self.dateLayers arrayByAddingObjectsFromArray:self.closePriceLayers] arrayByAddingObjectsFromArray:self.closePriceLineLayers];
+   if( self.xAxisLayer )
+   {
+      layers = [layers arrayByAddingObject:self.xAxisLayer];
+   }
+   
+   if( self.yAxisLayer )
+   {
+      layers = [layers arrayByAddingObject:self.yAxisLayer];
+   }
+
+   if( self.graphLayer )
+   {
+      layers = [layers arrayByAddingObject:self.graphLayer];
+   }
+
+   [layers enumerateObjectsUsingBlock:^(CALayer* layer, NSUInteger idx, BOOL *stop) {
+      [layer removeFromSuperlayer];
+   }];
+   
+   self.xAxisLayer = nil;
+   self.yAxisLayer = nil;
+   self.graphLayer = nil;
+   [self.dateLayers removeAllObjects];
+   [self.closePriceLayers removeAllObjects];
+   [self.closePriceLineLayers removeAllObjects];
 }
 
 -(void)createAxesLayers
