@@ -246,14 +246,13 @@ CALayer* _textLayerWithString(NSString* str)
                       self.originLocation.y + self.yStep + priceOffsetFromLowestPrice*self.yStep);
 }
 
-- (CGPathRef)createPathForFlatGraph
+- (CGPathRef)createPathWithPointProviderBlock:(NSPoint (^)(StockPrice* stockPrice))pointProviderBlock
 {
    BOOL firstPoint = YES;
    CGMutablePathRef path = CGPathCreateMutable();
    for( StockPrice* stockPrice in self.stockPrices )
    {
-      NSPoint pt = [self pointForStockPrice:stockPrice];
-      pt.y = self.originLocation.y;
+      NSPoint pt = pointProviderBlock(stockPrice);
       if ( firstPoint )
       {
          CGPathMoveToPoint(path, NULL, pt.x, pt.y);
@@ -267,24 +266,22 @@ CALayer* _textLayerWithString(NSString* str)
    return path;
 }
 
+- (CGPathRef)createPathForFlatGraph
+{
+   return [self createPathWithPointProviderBlock:^NSPoint(StockPrice *stockPrice) {
+
+      NSPoint pt = [self pointForStockPrice:stockPrice];
+      pt.y = self.originLocation.y;
+      return pt;
+   }];
+}
+
 - (CGPathRef)createPathForGraph
 {
-   BOOL firstPoint = YES;
-   CGMutablePathRef path = CGPathCreateMutable();
-   for( StockPrice* stockPrice in self.stockPrices )
-   {
-      NSPoint pt = [self pointForStockPrice:stockPrice];
-      if ( firstPoint )
-      {
-         CGPathMoveToPoint(path, NULL, pt.x, pt.y);
-         firstPoint = NO;
-      }
-      else
-      {
-         CGPathAddLineToPoint(path, NULL, pt.x, pt.y);
-      }
-   }
-   return path;
+   return [self createPathWithPointProviderBlock:^NSPoint(StockPrice *stockPrice) {
+      
+      return [self pointForStockPrice:stockPrice];
+   }];
 }
 
 - (void)createGraphLayer
