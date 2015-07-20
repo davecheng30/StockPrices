@@ -23,11 +23,11 @@
    
    NSArray* stockPrices = [StockPricesParser stockPricesFromURL:jsonURL];
    XCTAssertEqual(5, stockPrices.count);
-   XCTAssertEqualWithAccuracy(95.36,  ((StockPrice *)stockPrices[0]).close, 0.001);
-   XCTAssertEqualWithAccuracy(97.99,  ((StockPrice *)stockPrices[1]).close, 0.001);
-   XCTAssertEqualWithAccuracy(93.00,  ((StockPrice *)stockPrices[2]).close, 0.001);
-   XCTAssertEqualWithAccuracy(101.43, ((StockPrice *)stockPrices[3]).close, 0.001);
-   XCTAssertEqualWithAccuracy(102.66, ((StockPrice *)stockPrices[4]).close, 0.001);
+   XCTAssertEqualWithAccuracy(95.36,  ((StockPrice *)stockPrices[0]).closePrice, 0.001);
+   XCTAssertEqualWithAccuracy(97.99,  ((StockPrice *)stockPrices[1]).closePrice, 0.001);
+   XCTAssertEqualWithAccuracy(93.00,  ((StockPrice *)stockPrices[2]).closePrice, 0.001);
+   XCTAssertEqualWithAccuracy(101.43, ((StockPrice *)stockPrices[3]).closePrice, 0.001);
+   XCTAssertEqualWithAccuracy(102.66, ((StockPrice *)stockPrices[4]).closePrice, 0.001);
 }
 
 @end

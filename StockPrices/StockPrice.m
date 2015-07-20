@@ -24,7 +24,7 @@ NSDate* _dateFromJSONDateString(NSString* dateString)
    if ( self )
    {
       _date = date;
-      _close = close;
+      _closePrice = close;
    }
    return self;
 }

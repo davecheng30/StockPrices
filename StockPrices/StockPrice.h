@@ -11,7 +11,7 @@
 @interface StockPrice : NSObject
 
 @property (nonatomic) NSDate* date;
-@property (nonatomic) CGFloat close;
+@property (nonatomic) CGFloat closePrice;
 
 -(instancetype)initWithDate:(NSDate *)date close:(CGFloat)close NS_DESIGNATED_INITIALIZER;
 -(instancetype)initWithJSONDictionary:(NSDictionary *)jsonDictionary;
