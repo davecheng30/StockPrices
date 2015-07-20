@@ -11,6 +11,8 @@
 #import "CATextLayer+TextBounds.h"
 @import QuartzCore;
 
+static const NSTimeInterval s_secondsInOneDay = 60*60*24;
+
 CALayer* _textLayerWithString(NSString* str)
 {
    NSString* fontName = @"Helvetica";
@@ -36,9 +38,13 @@ CALayer* _textLayerWithString(NSString* str)
 @property(nonatomic) NSMutableArray* closePriceLayers;
 @property(nonatomic) NSMutableArray* closePriceLineLayers;
 
+@property(nonatomic) CGFloat xStep;
+@property(nonatomic) CGFloat yStep;
+
 @property(nonatomic) NSDate* firstDate;
 @property(nonatomic) NSDate* lastDate;
 @property(nonatomic) NSRange priceRange;
+
 @end
 
 @implementation StockPricesViewController
@@ -85,6 +91,8 @@ CALayer* _textLayerWithString(NSString* str)
    
    [self createClosePriceLayers];
    [self positionClosePriceLayers];
+   
+   [self createGraph];
 }
 
 - (void)createDateLayers
@@ -97,8 +105,7 @@ CALayer* _textLayerWithString(NSString* str)
    // Create an x-axis label for each date in between (inclusive)
    NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
    [dateFormatter setDateFormat:@"M/D"];
-   NSTimeInterval secondsInOneDay = 60*60*24;
-   for(NSDate* currentDate = self.firstDate; [currentDate isLessThanOrEqualTo:self.lastDate]; currentDate = [currentDate dateByAddingTimeInterval:secondsInOneDay] )
+   for(NSDate* currentDate = self.firstDate; [currentDate isLessThanOrEqualTo:self.lastDate]; currentDate = [currentDate dateByAddingTimeInterval:s_secondsInOneDay] )
    {
       NSString* dateString = [dateFormatter stringFromDate:currentDate];
       CALayer* dateLayer = _textLayerWithString(dateString);
@@ -112,12 +119,12 @@ CALayer* _textLayerWithString(NSString* str)
 {
    NSUInteger numLayers = self.dateLayers.count;
    CGFloat totalWidth = self.view.frame.size.width - self.originLocation.x;
-   CGFloat distanceBetweenLayers = totalWidth / (numLayers+1);
-   int currX = self.originLocation.x + distanceBetweenLayers;
+   self.xStep = totalWidth / (numLayers+1);
+   int currX = self.originLocation.x + self.xStep;
    for( CALayer* dateLayer in self.dateLayers )
    {
       dateLayer.position = CGPointMake(currX, self.originLocation.y - 2);
-      currX += distanceBetweenLayers;
+      currX += self.xStep;
    }
 }
 
@@ -164,22 +171,64 @@ CALayer* _textLayerWithString(NSString* str)
 {
    NSUInteger numLayers = self.closePriceLayers.count;
    CGFloat totalHeight = self.view.frame.size.height - self.originLocation.y;
-   CGFloat distanceBetweenLayers = totalHeight / (numLayers+1);
+   self.yStep = totalHeight / (numLayers+1);
    
-   int currY = self.originLocation.y + distanceBetweenLayers;
+   int currY = self.originLocation.y + self.yStep;
    for( CALayer* closePriceLayer in self.closePriceLayers )
    {
       closePriceLayer.position = CGPointMake(self.originLocation.x - 2, currY);
-      currY += distanceBetweenLayers;
+      currY += self.yStep;
    }
 
-   currY = self.originLocation.y + distanceBetweenLayers;
+   currY = self.originLocation.y + self.yStep;
    for( CALayer* closePriceLineLayer in self.closePriceLineLayers )
    {
       closePriceLineLayer.position = CGPointMake(self.originLocation.x, currY);
-      currY += distanceBetweenLayers;
+      currY += self.yStep;
    }
 }
+
+
+- (NSPoint)pointForStockPrice:(StockPrice *)stockPrice
+{
+   NSTimeInterval secondsSinceFirstDate = [stockPrice.date timeIntervalSinceDate:self.firstDate];
+   int numXSteps = secondsSinceFirstDate / s_secondsInOneDay;
+   
+   CGFloat priceOffsetFromLowestPrice = stockPrice.closePrice - self.priceRange.location;
+   return NSMakePoint(self.originLocation.x + self.xStep + numXSteps*self.xStep,
+                      self.originLocation.y + self.yStep + priceOffsetFromLowestPrice*self.yStep);
+}
+
+- (void)createGraph
+{
+   CAShapeLayer* shapeLayer = [CAShapeLayer layer];
+   shapeLayer.frame = self.view.bounds;
+   shapeLayer.lineWidth = 2.0f;
+   shapeLayer.strokeColor = [NSColor blackColor].CGColor;
+   shapeLayer.fillColor = nil;
+   
+   BOOL firstPoint = YES;
+   CGMutablePathRef path = CGPathCreateMutable();
+   for( StockPrice* stockPrice in self.stockPrices )
+   {
+      NSPoint pt = [self pointForStockPrice:stockPrice];
+      if ( firstPoint )
+      {
+         CGPathMoveToPoint(path, NULL, pt.x, pt.y);
+         firstPoint = NO;
+      }
+      else
+      {
+         CGPathAddLineToPoint(path, NULL, pt.x, pt.y);
+      }
+   }
+   
+   shapeLayer.path = path;
+   
+   CGPathRelease(path);
+   [self.view.layer addSublayer:shapeLayer];
+}
+
 
 
 @end
