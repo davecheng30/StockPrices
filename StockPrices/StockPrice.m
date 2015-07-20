@@ -11,7 +11,7 @@
 NSDate* _dateFromJSONDateString(NSString* dateString)
 {
    NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
-   [dateFormatter setDateFormat:@"YYYY-MM-DD"];
+   [dateFormatter setDateFormat:@"yyyy-MM-dd"];
    return [dateFormatter dateFromString:dateString];
 }
 

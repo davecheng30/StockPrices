@@ -104,7 +104,7 @@ CALayer* _textLayerWithString(NSString* str)
    
    // Create an x-axis label for each date in between (inclusive)
    NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
-   [dateFormatter setDateFormat:@"M/D"];
+   [dateFormatter setDateFormat:@"M/d"];
    for(NSDate* currentDate = self.firstDate; [currentDate isLessThanOrEqualTo:self.lastDate]; currentDate = [currentDate dateByAddingTimeInterval:s_secondsInOneDay] )
    {
       NSString* dateString = [dateFormatter stringFromDate:currentDate];
