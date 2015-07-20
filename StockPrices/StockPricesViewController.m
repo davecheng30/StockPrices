@@ -142,7 +142,7 @@ CALayer* _textLayerWithString(NSString* str)
    NSRange yRange = [self yAxisDollarRange];
    for( NSUInteger i = yRange.location; i <= NSMaxRange(yRange); i++)
    {
-      NSString* closePriceString = [NSString stringWithFormat:@"%ld", i];
+      NSString* closePriceString = [NSString stringWithFormat:@"$%ld", i];
       CALayer* closePriceLayer = _textLayerWithString(closePriceString);
       closePriceLayer.anchorPoint = CGPointMake(1.0, 0.5);
       [rootLayer addSublayer:closePriceLayer];
