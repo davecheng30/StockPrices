@@ -315,15 +315,25 @@ CALayer* _textLayerWithString(NSString* str)
 
 - (void)fadeInAxesAndLabels
 {
-   NSArray* layers = [[self.dateLayers arrayByAddingObjectsFromArray:self.closePriceLayers] arrayByAddingObjectsFromArray:self.closePriceLineLayers];
+   NSArray* layers = [self.dateLayers arrayByAddingObjectsFromArray:self.closePriceLayers];
    layers = [layers arrayByAddingObjectsFromArray:@[self.xAxisLayer, self.yAxisLayer]];
    for( CALayer* layer in layers )
    {
       CABasicAnimation* anim = [CABasicAnimation animationWithKeyPath:@"opacity"];
-      anim.duration = 1.0f;
+      anim.duration = 0.5f;
       anim.fromValue = @0.0;
       anim.toValue = @1.0;
       [layer addAnimation:anim forKey:@"opacity"];
+   }
+   
+   for( CALayer* closePriceLineLayer in self.closePriceLineLayers )
+   {
+      CABasicAnimation* anim = [CABasicAnimation animationWithKeyPath:@"bounds"];
+      anim.duration = 1.0f;
+      anim.fromValue = [NSValue valueWithRect:NSZeroRect];
+      anim.toValue   = [NSValue valueWithRect:closePriceLineLayer.bounds];
+      anim.timingFunction = [CAMediaTimingFunction functionWithName:kCAMediaTimingFunctionEaseOut];
+      [closePriceLineLayer addAnimation:anim forKey:@"bounds"];
    }
 }
 
