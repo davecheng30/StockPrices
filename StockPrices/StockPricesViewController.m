@@ -22,7 +22,7 @@ CALayer* _textLayerWithString(NSString* str)
    layer.fontSize = fontSize;
    layer.foregroundColor = [NSColor blackColor].CGColor;
    layer.contentsScale = [[NSScreen mainScreen] backingScaleFactor];
-   layer.backgroundColor = [NSColor greenColor].CGColor;
+//   layer.backgroundColor = [NSColor greenColor].CGColor;
    layer.alignmentMode = kCAAlignmentCenter;
    layer.frame = [layer textBoundingRect];
    return layer;
@@ -32,6 +32,7 @@ CALayer* _textLayerWithString(NSString* str)
 
 @property(nonatomic, copy) NSArray* stockPrices;
 @property(nonatomic) NSPoint originLocation;
+@property(nonatomic) NSMutableArray* dateLayers;
 
 @end
 
@@ -40,6 +41,9 @@ CALayer* _textLayerWithString(NSString* str)
 - (void)viewDidLoad
 {
    [super viewDidLoad];
+   
+   self.dateLayers = [NSMutableArray array];
+   
    self.view.wantsLayer = YES;
    self.view.layer.backgroundColor = [NSColor whiteColor].CGColor;
    self.originLocation = NSMakePoint(60, 30);
@@ -69,22 +73,40 @@ CALayer* _textLayerWithString(NSString* str)
 
 -(void)updateView
 {
-   CALayer* rootLayer = self.view.layer;
+   [self createDateLayers];
+   [self positionDateLayers];
+}
 
+- (void)createDateLayers
+{
+   CALayer* rootLayer = self.view.layer;
+   
    NSDate* firstDate = [self.stockPrices.firstObject date];
    NSDate* lastDate  = [self.stockPrices.lastObject date];
    
    // Create an x-axis label for each date in between (inclusive)
+   NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
+   [dateFormatter setDateFormat:@"M/D"];
    NSTimeInterval secondsInOneDay = 60*60*24;
    for(NSDate* currentDate = firstDate; [currentDate isLessThanOrEqualTo:lastDate]; currentDate = [currentDate dateByAddingTimeInterval:secondsInOneDay] )
    {
-      NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
-      [dateFormatter setDateFormat:@"M/D"];
       NSString* dateString = [dateFormatter stringFromDate:currentDate];
-//      NSLog(@"date = %@", dateString);
-      
       CALayer* dateLayer = _textLayerWithString(dateString);
       [rootLayer addSublayer:dateLayer];
+      [self.dateLayers addObject:dateLayer];
+   }
+}
+
+- (void)positionDateLayers
+{
+   NSUInteger numLayers = self.dateLayers.count;
+   CGFloat totalWidth = self.view.frame.size.width - self.originLocation.x;
+   CGFloat distanceBetweenLayers = totalWidth / (numLayers+1);
+   int currX = self.originLocation.x + distanceBetweenLayers;
+   for( CALayer* dateLayer in self.dateLayers )
+   {
+      dateLayer.position = CGPointMake(currX, 14);
+      currX += distanceBetweenLayers;
    }
 }
 
