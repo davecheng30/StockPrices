@@ -77,16 +77,21 @@ CALayer* _textLayerWithString(NSString* str)
 {
    [self removeExistingLayers];
    
+   // x and y axis lines
    [self createAxesLayers];
    
+   // create and position date labels on the x-axis
    [self createDateLayers];
    [self positionDateLayers];
    
+   // create and position close price labels on the y-axis
    [self createClosePriceLayers];
    [self positionClosePriceLayers];
    
+   // Create the actual plotted graph layer
    [self createGraphLayer];
    
+   // Do some fancy animations
    [self fadeInAxesAndLabels];
    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
       
@@ -144,7 +149,8 @@ CALayer* _textLayerWithString(NSString* str)
    self.firstDate = [self.stockPrices.firstObject date];
    self.lastDate  = [self.stockPrices.lastObject date];
    
-   // Create an x-axis label for each date in between (inclusive)
+   // Create an x-axis label for each date in between (inclusive) to handle potential gaps between dates
+   // so we always have an even interval between dates
    NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
    [dateFormatter setDateFormat:@"M/d"];
    for(NSDate* currentDate = self.firstDate; [currentDate isLessThanOrEqualTo:self.lastDate]; currentDate = [currentDate dateByAddingTimeInterval:s_secondsInOneDay] )
@@ -170,7 +176,7 @@ CALayer* _textLayerWithString(NSString* str)
    }
 }
 
--(NSRange)yAxisDollarRange
+-(NSRange)calculateYAxisDollarRange
 {
    NSParameterAssert(self.stockPrices.count > 0);
    CGFloat minClosePrice = CGFLOAT_MAX;
@@ -191,7 +197,7 @@ CALayer* _textLayerWithString(NSString* str)
    CALayer* rootLayer = self.view.layer;
 
    // Create a y-axis point for each integer dollar in this range
-   self.priceRange = [self yAxisDollarRange];
+   self.priceRange = [self calculateYAxisDollarRange];
    for( NSUInteger i = self.priceRange.location; i <= NSMaxRange(self.priceRange); i++)
    {
       NSString* closePriceString = [NSString stringWithFormat:@"$%ld", i];
@@ -229,7 +235,6 @@ CALayer* _textLayerWithString(NSString* str)
       currY += self.yStep;
    }
 }
-
 
 - (NSPoint)pointForStockPrice:(StockPrice *)stockPrice
 {
