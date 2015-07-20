@@ -31,6 +31,7 @@ CALayer* _textLayerWithString(NSString* str)
 @interface StockPricesViewController ()
 
 @property(nonatomic, copy) NSArray* stockPrices;
+@property(nonatomic) NSPoint originLocation;
 
 @end
 
@@ -40,6 +41,24 @@ CALayer* _textLayerWithString(NSString* str)
 {
    [super viewDidLoad];
    self.view.wantsLayer = YES;
+   self.view.layer.backgroundColor = [NSColor whiteColor].CGColor;
+   self.originLocation = NSMakePoint(60, 30);
+   
+//   CALayer* originLayer = [CALayer layer];
+//   originLayer.backgroundColor = [NSColor redColor].CGColor;
+//   originLayer.bounds = NSMakeRect(0,0, 5, 5);
+//   originLayer.position = self.originLocation;
+//   [self.view.layer addSublayer:originLayer];
+   
+   CALayer* xAxisLayer = [CALayer layer];
+   xAxisLayer.backgroundColor = [NSColor blackColor].CGColor;
+   xAxisLayer.frame = NSMakeRect(self.originLocation.x, self.originLocation.y, self.view.bounds.size.width, 1);
+   [self.view.layer addSublayer:xAxisLayer];
+
+   CALayer* yAxisLayer = [CALayer layer];
+   yAxisLayer.backgroundColor = [NSColor blackColor].CGColor;
+   yAxisLayer.frame = NSMakeRect(self.originLocation.x, self.originLocation.y, 1, self.view.bounds.size.height);
+   [self.view.layer addSublayer:yAxisLayer];
 }
 
 -(void)loadStockPrices:(NSArray *)stockPrices
