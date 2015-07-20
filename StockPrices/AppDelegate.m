@@ -23,6 +23,11 @@
 {
    self.stockPricesViewController = [[StockPricesViewController alloc] init];
    
+   [self insertStockPricesView];
+}
+
+- (void)insertStockPricesView
+{
    NSView* parentView = self.stockPricesContainerView;
    NSView* childView = self.stockPricesViewController.view;
    [parentView addSubview:childView];
