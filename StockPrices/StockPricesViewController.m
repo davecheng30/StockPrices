@@ -97,6 +97,7 @@ CALayer* _textLayerWithString(NSString* str)
    {
       NSString* dateString = [dateFormatter stringFromDate:currentDate];
       CALayer* dateLayer = _textLayerWithString(dateString);
+      dateLayer.anchorPoint = CGPointMake(0.5, 1.0);
       [rootLayer addSublayer:dateLayer];
       [self.dateLayers addObject:dateLayer];
    }
@@ -110,7 +111,7 @@ CALayer* _textLayerWithString(NSString* str)
    int currX = self.originLocation.x + distanceBetweenLayers;
    for( CALayer* dateLayer in self.dateLayers )
    {
-      dateLayer.position = CGPointMake(currX, 14);
+      dateLayer.position = CGPointMake(currX, self.originLocation.y - 2);
       currX += distanceBetweenLayers;
    }
 }
@@ -156,7 +157,7 @@ CALayer* _textLayerWithString(NSString* str)
    int currY = self.originLocation.y + distanceBetweenLayers;
    for( CALayer* closePriceLayer in self.closePriceLayers )
    {
-      closePriceLayer.position = CGPointMake(self.originLocation.x, currY);
+      closePriceLayer.position = CGPointMake(self.originLocation.x - 2, currY);
       currY += distanceBetweenLayers;
    }
 }
